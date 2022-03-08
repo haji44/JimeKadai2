@@ -47,14 +47,11 @@
                                                 </segments>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="selectedSegmentTintColor" name="AccentColor"/>
-                                                <connections>
-                                                    <action selector="didSegmentChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="SeN-Hq-rho"/>
-                                                </connections>
                                             </segmentedControl>
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nxS-kX-ezZ">
-                                        <rect key="frame" x="67" y="184" width="67" height="31"/>
+                                        <rect key="frame" x="66.5" y="185" width="67" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="tinted" title="Button"/>
                                         <connections>
@@ -62,7 +59,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Boo-Wd-QCh">
-                                        <rect key="frame" x="79" y="258" width="42" height="20"/>
+                                        <rect key="frame" x="79.5" y="258" width="41.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -78,6 +75,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="operatorSegmentedControl" destination="mll-5H-X6H" id="7hJ-9Z-bh9"/>
                         <outlet property="resultLabel" destination="Boo-Wd-QCh" id="Zq9-w7-7L6"/>
                         <outlet property="textField1" destination="8WF-MR-yre" id="6A0-V5-TRN"/>
                         <outlet property="textField2" destination="a27-PL-P98" id="fXy-HM-Cca"/>
