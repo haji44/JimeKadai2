@@ -14,27 +14,53 @@ class ViewController: UIViewController {
     @IBOutlet private weak var resultLabel: UILabel!
     @IBOutlet private weak var operatorSegmentedControl: UISegmentedControl!
 
-    enum Sign: CaseIterable {
-        case plus, minus, multiply, divide
+    private enum ErrorMessage: Error {
+        case notNumeric, divideByZero, unkwon
+
+        var message: String {
+            switch self {
+            case .notNumeric:
+                return "Text is not allowed as input"
+            case .divideByZero:
+                return "Can't dived by zero"
+            case .unkwon:
+                return "Something went wrong"
+            }
+        }
+    }
+
+    private enum Calculation: Int {
+        case plus, minus, mitiply, divide
+        
+        func calculate(_ first: Double, _ second: Double) -> Result<Double, ErrorMessage> {
+            switch self {
+            case .plus:
+                return .success(first + second)
+            case .minus:
+                return .success(first - second)
+            case .mitiply:
+                return .success(first * second)
+            case .divide:
+                guard !second.isZero else { return .failure(.divideByZero)}
+                return .success(first / second)
+            }
+        }
     }
 
     @IBAction private func didCalcuratorButtoneTaped(_ sender: UIButton) {
-        let number1 = Float(textField1.text ?? "") ?? 0
-        let number2 = Float(textField2.text ?? "") ?? 0
-        let result: String = String(calcurate(num1: number1, num2: number2))
-        resultLabel.text = result
-    }
-
-    private func calcurate(num1: Float, num2: Float) -> Float {
-        switch Sign.allCases[operatorSegmentedControl.selectedSegmentIndex] {
-        case .plus:
-            return num1 + num2
-        case .minus:
-            return num1 - num2
-        case .multiply:
-            return num1 * num2
-        case .divide:
-            return num1 / num2
+        guard let first = textField1.text.flatMap({ Double($0) }),
+              let second = textField2.text.flatMap({ Double($0) }) else {
+                  resultLabel.text = ErrorMessage.notNumeric.message
+            return
+        }
+        guard let calculation = Calculation(rawValue: operatorSegmentedControl.selectedSegmentIndex) else {
+            fatalError(ErrorMessage.unkwon.message)
+        }
+        switch calculation.calculate(first, second) {
+        case .success(let result):
+            resultLabel.text = String(result)
+        case .failure(let error):
+            resultLabel.text = error.message
         }
     }
 }
