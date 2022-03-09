@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet private weak var operatorSegmentedControl: UISegmentedControl!
 
     private enum ErrorMessage: Error {
-        case notNumeric, divideByZero, unkwon
+        case notNumeric, divideByZero, unkwon, empty
 
         var message: String {
             switch self {
@@ -25,14 +25,22 @@ class ViewController: UIViewController {
                 return "Can't dived by zero"
             case .unkwon:
                 return "Something went wrong"
+            case .empty:
+                return "Empty is not allowed"
             }
         }
     }
 
     private enum Calculation: Int {
         case plus, minus, mitiply, divide
-        
-        func calculate(_ first: Double, _ second: Double) -> Result<Double, ErrorMessage> {
+
+        func calculate(_ first: String, _ second: String) -> Result<Double, ErrorMessage> {
+
+            guard let first = Double(first),
+                  let second = Double(second) else {
+                      return .failure(.notNumeric)
+            }
+
             switch self {
             case .plus:
                 return .success(first + second)
@@ -48,17 +56,18 @@ class ViewController: UIViewController {
     }
 
     @IBAction private func didCalcuratorButtoneTaped(_ sender: UIButton) {
-        guard let first = textField1.text.flatMap({ Double($0) }),
-              let second = textField2.text.flatMap({ Double($0) }) else {
-                  resultLabel.text = ErrorMessage.notNumeric.message
-            return
+        if textField1.text?.isEmpty ?? true || textField2.text?.isEmpty ?? true {
+            return resultLabel.text = ErrorMessage.empty.message
+        }
+        guard let first = textField1.text, let second = textField2.text else {
+            return resultLabel.text = ErrorMessage.empty.message
         }
         guard let calculation = Calculation(rawValue: operatorSegmentedControl.selectedSegmentIndex) else {
             fatalError(ErrorMessage.unkwon.message)
         }
         switch calculation.calculate(first, second) {
         case .success(let result):
-            resultLabel.text = String(result)
+            resultLabel.text = "\(result)"
         case .failure(let error):
             resultLabel.text = error.message
         }
